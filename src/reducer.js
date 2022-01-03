@@ -25,8 +25,35 @@ const reducer = (state, action) => {
         ...state,
         cart: tempCartState,
       };
+    case "LOADING":
+      return {
+        ...state,
+        loading: action.payload,
+      };
+    case "DISPLAY_DATA":
+      return {
+        ...state,
+        cart: action.payload,
+      };
+    case "GET_TOTALS":
+      const { total, amount } = state.cart.reduce(
+        (cartTotal, item) => {
+          const { price, amount } = item;
+          cartTotal.total += price * amount;
+          cartTotal.amount += amount;
+          return cartTotal;
+        },
+        {
+          total: 0,
+          amount: 0,
+        }
+      );
+      return {
+        ...state,
+        total: parseFloat(total.toFixed(2)),
+        amount: amount,
+      };
   }
-
   return state;
 };
 
